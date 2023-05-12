@@ -80,7 +80,7 @@ class Module:
         password = password.replace('$', '\$')
         password = password.replace('!', '\!')
         password = password.replace('!', '\!')
-        script = """
+        return """
 import subprocess
 import sys
 try:
@@ -117,6 +117,9 @@ try:
 except Exception as e:
     print "[!] Issue with LoginHook script: " + str(e)
 
-""" % (loginhookScriptPath, password, loginhookScriptPath, password)
-
-        return script
+""" % (
+            loginhookScriptPath,
+            password,
+            loginhookScriptPath,
+            password,
+        )

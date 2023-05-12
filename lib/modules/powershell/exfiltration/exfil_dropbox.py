@@ -132,10 +132,9 @@ Invoke-DropboxUpload  """
         for option, values in self.options.iteritems():
             if option.lower() != "agent":
                 if values['Value'] and values['Value'] != '':
-                    if values['Value'].lower() == "true":
-                        # if we're just adding a switch
-                        script += " -" + str(option)
-                    else:
-                        script += " -" + str(option) + " " + str(values['Value'])
-        
+                    script += (
+                        f" -{str(option)}"
+                        if values['Value'].lower() == "true"
+                        else f" -{str(option)} " + str(values['Value'])
+                    )
         return script

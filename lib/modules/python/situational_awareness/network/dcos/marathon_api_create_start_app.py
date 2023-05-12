@@ -122,7 +122,7 @@ class Module:
         disk = self.options['Disk']['Value']
         instances = self.options['Instances']['Value']
 
-        script = """
+        return """
 import urllib2
 
 target = "%s"
@@ -177,6 +177,13 @@ except Exception as e:
     print "Failure sending payload: " + str(e)
 
 print "Finished"
-""" %(target, port, appId, cmd, cpus, mem, disk, instances)
-
-        return script
+""" % (
+            target,
+            port,
+            appId,
+            cmd,
+            cpus,
+            mem,
+            disk,
+            instances,
+        )

@@ -78,7 +78,7 @@ class Module:
         script = "cmd = \"find /Users/ -name *.emlx 2>/dev/null"
 
         if searchTerm != "":
-            script += "|xargs grep -i '"+searchTerm+"'\""
+            script += f"|xargs grep -i '{searchTerm}" + "'\""
         else:
             script += "\""
 

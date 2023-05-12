@@ -89,14 +89,13 @@ Function Get-Schwifty
 } Get-Schwifty"""
 
         for option,values in self.options.iteritems():
-            if option.lower() != "agent" and option.lower() != "computername":
+            if option.lower() not in ["agent", "computername"]:
                 if values['Value'] and values['Value'] != '':
-                    if values['Value'].lower() == "true":
-                        # if we're just adding a switch
-                        script += " -" + str(option)
-                    else:
-                        script += " -" + str(option) + " " + str(values['Value'])
-
+                    script += (
+                        f" -{str(option)}"
+                        if values['Value'].lower() == "true"
+                        else f" -{str(option)} " + str(values['Value'])
+                    )
         script += "; 'Agent is getting schwifty!'"
         if obfuscate:
             script = helpers.obfuscate(self.mainMenu.installPath, psScript=script, obfuscationCommand=obfuscationCommand)

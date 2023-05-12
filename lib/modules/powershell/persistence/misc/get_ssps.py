@@ -189,7 +189,7 @@ Get-SecurityPackages
         for option,values in self.options.iteritems():
             if option.lower() != "agent":
                 if values['Value'] and values['Value'] != '':
-                    script += " -" + str(option) + " " + str(values['Value']) 
+                    script += f" -{str(option)} " + str(values['Value'])
         if obfuscate:
             script = helpers.obfuscate(self.mainMenu.installPath, psScript=script, obfuscationCommand=obfuscationCommand)
         return script

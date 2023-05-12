@@ -431,12 +431,14 @@ class Listeners:
         cur.close()
         self.shutdown_listener(listenerName)
         # dispatch this event
-        message = "[*] Listener {} killed".format(listenerName)
+        message = f"[*] Listener {listenerName} killed"
         signal = json.dumps({
             'print': True,
             'message': message
         })
-        dispatcher.send(signal, sender="listeners/{}/{}".format(activeListenerModuleName, listenerName))
+        dispatcher.send(
+            signal, sender=f"listeners/{activeListenerModuleName}/{listenerName}"
+        )
 
 
     def is_listener_valid(self, name):
@@ -455,10 +457,7 @@ class Listeners:
         cur.close()
         self.conn.row_factory = oldFactory
 
-        if results:
-            return results[0]
-        else:
-            return None
+        return results[0] if results else None
 
 
     def get_listener_name(self, listenerId):
@@ -470,10 +469,7 @@ class Listeners:
         results = cur.fetchone()
         cur.close()
 
-        if results:
-            return results[0]
-        else:
-            return None
+        return results[0] if results else None
 
 
     def get_listener_module(self, listenerName):
@@ -485,10 +481,7 @@ class Listeners:
         results = cur.fetchone()
         cur.close()
 
-        if results:
-            return results[0]
-        else:
-            return None
+        return results[0] if results else None
 
     def get_listener_options(self):
         """
@@ -499,10 +492,7 @@ class Listeners:
         results = cur.fetchall()
         cur.close()
 
-        if results:
-            return results[0][0]
-        else:
-            return None
+        return results[0][0] if results else None
 
 
     def get_listener_names(self):
@@ -523,11 +513,16 @@ class Listeners:
         cur.execute("SELECT name,module,options FROM listeners")
         db_listeners = cur.fetchall()
 
-        inactive_listeners = {}
-        for listener in filter((lambda x: x['name'] not in self.activeListeners.keys()), db_listeners):
-            inactive_listeners[listener['name']] = {'moduleName': listener['module'],
-                                                    'options': pickle.loads(listener['options'])}
-
+        inactive_listeners = {
+            listener['name']: {
+                'moduleName': listener['module'],
+                'options': pickle.loads(listener['options']),
+            }
+            for listener in filter(
+                (lambda x: x['name'] not in self.activeListeners.keys()),
+                db_listeners,
+            )
+        }
         cur.close()
         self.conn.row_factory = oldFactory
         return inactive_listeners

@@ -32,4 +32,4 @@ class Plugin(Plugin):
 
         # you can also store data in the plugin (see onLoad)
         self.calledTimes += 1
-        print("This function has been called {} times.".format(self.calledTimes))
+        print(f"This function has been called {self.calledTimes} times.")

@@ -88,9 +88,9 @@ class Module:
         port = self.options['Port']['Value']
         ssl = self.options['SSL']['Value']
 
-        
 
-        script = """
+
+        return """
 import urllib2
 import sys
 import re
@@ -242,6 +242,8 @@ ssl = %s
 
 main(ip, port, ssl)
 
-""" %(target, port, ssl)
-
-        return script
+""" % (
+            target,
+            port,
+            ssl,
+        )
