@@ -77,8 +77,9 @@ class Module:
         voice = self.options['Voice']['Value']
         text = self.options['Text']['Value']
 
-        script = """
+        return """
 run_command('say -v %s %s')
-""" % (voice, text)
-
-        return script
+""" % (
+            voice,
+            text,
+        )

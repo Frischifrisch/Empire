@@ -85,9 +85,9 @@ class Module:
         principal = self.options['Principal']['Value']
         ntlmhash = self.options['Hash']['Value']
 
-        
 
-        script = """
+
+        return """
 import subprocess
 try:
     print "Creating Keytab.."
@@ -106,6 +106,10 @@ try:
     print "Keytab injected into current session!"
 except Exception as e:
     print e
-""" %(keytab,principal,ntlmhash,keytab,principal)
-
-        return script
+""" % (
+            keytab,
+            principal,
+            ntlmhash,
+            keytab,
+            principal,
+        )

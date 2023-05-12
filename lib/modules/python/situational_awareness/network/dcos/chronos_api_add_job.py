@@ -129,7 +129,7 @@ class Module:
         schedule = self.options['Schedule']['Value']
         last = self.options['LastSuccess']['Value']
 
-        script = """
+        return """
 import urllib2
 
 target = "%s"
@@ -158,6 +158,14 @@ except Exception as e:
     print "Failure sending payload: " + str(e)
 
 print "Finished"
-""" %(target, port, name, command, owner, ownerName, description, schedule, last)
-
-        return script
+""" % (
+            target,
+            port,
+            name,
+            command,
+            owner,
+            ownerName,
+            description,
+            schedule,
+            last,
+        )

@@ -106,9 +106,10 @@ class Module:
             return ''.join([choice(hex) for x in range(8)]) + "-" + ''.join(
                 [choice(hex) for x in range(4)]) + "-" + ''.join([choice(hex) for x in range(4)]) + "-" + ''.join(
                 [choice(hex) for x in range(4)]) + "-" + ''.join([choice(hex) for x in range(12)])
+
         CriterionUniqueId = UUID()
         RuleId = UUID()
-        TimeStamp = str(int(time()))[0:9]
+        TimeStamp = str(int(time()))[:9]
         SyncedRules = "/tmp/" + ''.join(choice(ascii_uppercase) for i in range(12))
         RulesActiveState = "/tmp/" + ''.join(choice(ascii_uppercase) for i in range(12))
         AppleScript = ''.join(choice(ascii_uppercase) for i in range(12)) + ".scpt"

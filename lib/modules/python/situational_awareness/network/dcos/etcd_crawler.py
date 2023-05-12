@@ -85,21 +85,9 @@ class Module:
 
     def generate(self, obfuscate=False, obfuscationCommand=""):
         target = self.options['Target']['Value']
-        #port = self.options['Port']['Value']
-	#print str("port: " + port)
-        #depth = self.options['Depth']['Value']
-	#print str("depth: " + port)
-        #if not type(depth) == type(1):
-        #    depth = int(depth)
-        #if not type(port) == type(1):
-        #    port = int(port)
-	port = self.options['Port']['Value']
-	depth = self.options['Depth']['Value']
-	#print str("target: " + target)
-	#print str("port: " + port)
-	#print str("depth: " + depth)
-
-        script = """
+        port = self.options['Port']['Value']
+        depth = self.options['Depth']['Value']
+        return """
 import urllib2
 import json
 
@@ -130,6 +118,8 @@ def main():
 main()
 
 
-""" % (target, port, depth)
-
-        return script
+""" % (
+            target,
+            port,
+            depth,
+        )

